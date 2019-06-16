@@ -25,14 +25,14 @@ namespace UserInterface
         public virtual Point Center{ get => Area.Center; set => Area = new Rectangle(value.X, value.Y, Area.Width, Area.Height); }
 
 
-        public void AutoSetAllTextures(Texture2D texture, GraphicsDevice graphics)
+        public virtual void AutoSetAllTextures(Texture2D texture, GraphicsDevice graphics)
         {
             DefaultTexture = texture;
             MouseOverTexture = CreateModifiedTexture(texture, 1.1f, graphics);
             ClickTexture = CreateModifiedTexture(texture, 1.2f, graphics);
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch, GameTime gt)
         {
             spriteBatch.Draw(ActiveTexture, Area, Color);
         }

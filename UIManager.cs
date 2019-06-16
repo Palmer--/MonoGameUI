@@ -44,11 +44,11 @@ namespace UserInterface
             return GetUIAtLocation(location) != null;
         }
 
-        public void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb, GameTime gt)
         {
             foreach (UIBase ibase in UiElements)
             {
-                ibase.Draw(sb);
+                ibase.Draw(sb, gt);
             }
         } 
     }

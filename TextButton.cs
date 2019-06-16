@@ -52,9 +52,9 @@ namespace UserInterface
             fontOrigin = new Vector2(Area.X + Area.Width / 2 - fontsize.X / 2, Area.Y + (Area.Height / 2) - fontsize.Y / 2);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, GameTime gt)
         {
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, gt);
             spriteBatch.DrawString(Font, text, fontOrigin, Color.White);
         }
 

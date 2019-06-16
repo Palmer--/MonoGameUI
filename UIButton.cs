@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace UserInterface
@@ -11,9 +12,9 @@ namespace UserInterface
     {
         public Texture2D Icon { get; set; }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, GameTime gt)
         {
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, gt);
             if(Icon != null)
                 spriteBatch.Draw(Icon, Area, Color);
         }
