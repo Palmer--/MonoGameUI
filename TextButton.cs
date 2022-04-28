@@ -8,14 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UserInterface
 {
-    public class UITextButton:UIButton
+    public class UITextButton:UIBase
     {
         Vector2 fontOrigin;
-
-        public UITextButton()
-        {
-            Font = DefaultFont;
-        }
 
         public SpriteFont Font { get; set; }
 
@@ -41,13 +36,20 @@ namespace UserInterface
             }
         }
 
+        public UITextButton(Texture2D texture, string text = "") : base(texture)
+        {
+            Font = DefaultFont;
+            Text = text;
+            ScaleButtonToText();
+        }
+
 
         private void RecalcFontOrigin()
         {
             if (Font == null)
                 return;
 
-            text = SplitMessage(text ?? string.Empty, Font, Area.Width - 3);
+           // text = SplitMessage(text ?? string.Empty, Font, Area.Width - 3);
             Vector2 fontsize = Font.MeasureString(Text);
             fontOrigin = new Vector2(Area.X + Area.Width / 2 - fontsize.X / 2, Area.Y + (Area.Height / 2) - fontsize.Y / 2);
         }
@@ -77,12 +79,10 @@ namespace UserInterface
             return retval.ToString();
         }
 
-        public void ScaleButtonHeightToText()
+        public void ScaleButtonToText(int widthPadding = 0, int heightPadding = 0)
         {
             Vector2 size = Font.MeasureString(text);
-            Rectangle area = Area;
-            area.Height = (int)size.Y + 4;
-            Area = area;
+            Area = new Rectangle(Area.X, Area.Y, (int)size.X + widthPadding, (int)size.Y + heightPadding);
         }
     }
 }

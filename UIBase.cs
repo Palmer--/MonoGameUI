@@ -14,48 +14,61 @@ namespace UserInterface
         public static SpriteFont DefaultFont { get; set; }
 
         public virtual Rectangle Area { get; set; }
-        public virtual Texture2D DefaultTexture { get; set; }
-        public virtual Texture2D MouseOverTexture { get; set; }
-        public virtual Texture2D ClickTexture { get; set; }
-        public static UIBase GotFocus { get; set; }
-        private Texture2D ActiveTexture { get; set; }
-        protected Color Color = Color.White;
+        public virtual Point Location { get => Area.Location; set => Area = new Rectangle(value, Area.Size); }
+        public virtual Texture2D Texture { get; set; }
+
+        public virtual Color ActiveColor { get; set; } = Color.DarkGray;
+        public virtual Color DefaultColor { get; set; } = Color.DarkGray;
+        public virtual Color HighLightColor { get; set; } = Color.CornflowerBlue;
+        //public virtual Texture2D MouseOverTexture { get; set; }
+        //public virtual Texture2D ClickTexture { get; set; }
         public event EventHandler Clicked;
 
         public virtual Point Center{ get => Area.Center; set => Area = new Rectangle(value.X, value.Y, Area.Width, Area.Height); }
 
-
-        public virtual void AutoSetAllTextures(Texture2D texture, GraphicsDevice graphics)
+        public UIBase(Texture2D texture)
         {
-            DefaultTexture = texture;
-            MouseOverTexture = CreateModifiedTexture(texture, 1.1f, graphics);
-            ClickTexture = CreateModifiedTexture(texture, 1.2f, graphics);
+            Texture = texture;
         }
+
+
+        //public virtual void AutoSetAllTextures(Texture2D texture, GraphicsDevice graphics)
+        //{
+        //    DefaultTexture = texture;
+        //    MouseOverTexture = CreateModifiedTexture(texture, 1.1f, graphics);
+        //    ClickTexture = CreateModifiedTexture(texture, 1.2f, graphics);
+        //    ActiveTexture = DefaultTexture;
+        //}
 
         public virtual void Draw(SpriteBatch spriteBatch, GameTime gt)
         {
-            spriteBatch.Draw(ActiveTexture, Area, Color);
+            spriteBatch.Draw(Texture, Area, ActiveColor);
         }
         public virtual void Update(GameTime gameTime,MouseState oldMState,MouseState mState, KeyboardState oldKState,KeyboardState kState)
         {
-            if (!Area.Contains(mState.Position))
+
+            if (Area.Contains(mState.Position) && !Area.Contains(oldMState.Position))
             {
-                ActiveTexture = DefaultTexture;
+                ActiveColor = HighLightColor;
+            }
+            else if(!Area.Contains(mState.Position))
+            {
+                ActiveColor = DefaultColor;
                 return;
             }
+            
             if (LeftMousePressedThisTick(oldMState, mState))
             {
-                ActiveTexture = ClickTexture;
-                GotFocus = this;
-                return;
-            }
-            if (GotFocus == this && LeftMouseReleasedThisTick(oldMState, mState))
-            {
                 Clicked?.Invoke(this, new EventArgs());
-                ActiveTexture = MouseOverTexture;
                 return;
             }
-            ActiveTexture = MouseOverTexture;
+        }
+
+        public virtual UIBase? GetElementAtLocation(Point location)
+        {
+            if (Area.Contains(location))
+                return this;
+            return null;
         }
 
         private bool LeftMouseReleasedThisTick(MouseState oldMState, MouseState mState)
@@ -69,19 +82,19 @@ namespace UserInterface
             return oldMState.LeftButton == ButtonState.Released && mState.LeftButton == ButtonState.Pressed;
         }
 
-        public virtual Texture2D CreateModifiedTexture(Texture2D defaultTexture,float multiplyValue, GraphicsDevice graphics)
-        {
-            Color[] colors = new Color[DefaultTexture.Width * defaultTexture.Height];
-            DefaultTexture.GetData(colors);
+        //public virtual Texture2D CreateModifiedTexture(Texture2D defaultTexture,float multiplyValue, GraphicsDevice graphics)
+        //{
+        //    Color[] colors = new Color[DefaultTexture.Width * defaultTexture.Height];
+        //    DefaultTexture.GetData(colors);
 
-            for (int i = 0; i < colors.Length; i++)
-            {
-                colors[i] = Color.Multiply(colors[i], multiplyValue);
-            }
+        //    for (int i = 0; i < colors.Length; i++)
+        //    {
+        //        colors[i] = Color.Multiply(colors[i], multiplyValue);
+        //    }
 
-            var newTexture = new Texture2D(graphics, defaultTexture.Width, defaultTexture.Height);
-            newTexture.SetData(colors);
-            return newTexture;
-        }
+        //    var newTexture = new Texture2D(graphics, defaultTexture.Width, defaultTexture.Height);
+        //    newTexture.SetData(colors);
+        //    return newTexture;
+        //}
     }
 }

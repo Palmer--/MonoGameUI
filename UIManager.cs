@@ -14,6 +14,13 @@ namespace UserInterface
         public List<UIBase> UiElements { get; set; } = new List<UIBase>();
         KeyboardState oldKeyboardState;
         MouseState oldMouseState;
+        SpriteBatch spriteBatch;
+
+        public UIManager(GraphicsDevice graphicsDevice)
+        {
+            spriteBatch = new SpriteBatch(graphicsDevice); 
+        
+        }
 
         public void Update(GameTime gt)
         {
@@ -29,7 +36,7 @@ namespace UserInterface
             oldMouseState = mouseState;
         }
 
-        public UIBase GetUIAtLocation(Point location)
+        public UIBase? GetUIAtLocation(Point location)
         {
             foreach (UIBase ui in UiElements)
             {
@@ -39,17 +46,19 @@ namespace UserInterface
             return null;
         }
 
-        public bool UIAtLocation(Point location)
+        public bool IsPointOverGUI(Point location)
         {
             return GetUIAtLocation(location) != null;
         }
 
-        public void Draw(SpriteBatch sb, GameTime gt)
+        public void Draw(GameTime gt)
         {
+            spriteBatch.Begin();
             foreach (UIBase ibase in UiElements)
             {
-                ibase.Draw(sb, gt);
+                ibase.Draw(spriteBatch, gt);
             }
-        } 
+            spriteBatch.End();
+        }
     }
 }
