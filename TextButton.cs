@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UserInterface
 {
-    public class UITextButton:UIBase
+    public class TextButton:UIBase
     {
         Vector2 fontOrigin;
 
@@ -32,11 +32,12 @@ namespace UserInterface
             set
             {
                 text = value;
+                ScaleButtonToText();
                 RecalcFontOrigin();
             }
         }
 
-        public UITextButton(Texture2D texture, string text = "") : base(texture)
+        public TextButton(Texture2D texture, string text = "") : base(texture)
         {
             Font = DefaultFont;
             Text = text;

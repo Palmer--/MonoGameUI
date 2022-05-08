@@ -7,12 +7,12 @@ using System.Text;
 
 namespace UserInterface
 {
-    internal class Pannel: UIBase
+    public class Panel: UIBase
     {
         public List<UIBase> Elements = new List<UIBase>();
 
         public override Rectangle Area { get => base.Area; set => AreaChanged(value); }
-        public Pannel(Texture2D texture):base(texture)
+        public Panel(Texture2D texture):base(texture)
         { 
         
         }
@@ -22,7 +22,7 @@ namespace UserInterface
             if (newArea == Area)
                 return;
 
-            Area = newArea;
+            base.Area = newArea;
             var deltaX = newArea.X - Area.X;
             var deltaY = newArea.Y - Area.Y;
 
