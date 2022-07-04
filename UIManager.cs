@@ -15,11 +15,11 @@ namespace UserInterface
         KeyboardState oldKeyboardState;
         MouseState oldMouseState;
         SpriteBatch spriteBatch;
+        //public UIBase? MouseOverTooltip { get; set; }
 
         public UIManager(GraphicsDevice graphicsDevice)
         {
             spriteBatch = new SpriteBatch(graphicsDevice); 
-        
         }
 
         public void Update(GameTime gt)
@@ -50,6 +50,7 @@ namespace UserInterface
         {
             return GetUIAtLocation(location) != null;
         }
+
 
         public void Draw(GameTime gt)
         {

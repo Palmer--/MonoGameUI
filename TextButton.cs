@@ -24,13 +24,15 @@ namespace UserInterface
             }
         }
 
-        string text;
+        string text = "";
         public string Text
         {
             get => text;
 
             set
             {
+                if (value == null)
+                    throw new ArgumentException("Text can not be null.");
                 text = value;
                 ScaleButtonToText();
                 RecalcFontOrigin();
@@ -50,7 +52,6 @@ namespace UserInterface
             if (Font == null)
                 return;
 
-           // text = SplitMessage(text ?? string.Empty, Font, Area.Width - 3);
             Vector2 fontsize = Font.MeasureString(Text);
             fontOrigin = new Vector2(Area.X + Area.Width / 2 - fontsize.X / 2, Area.Y + (Area.Height / 2) - fontsize.Y / 2);
         }
