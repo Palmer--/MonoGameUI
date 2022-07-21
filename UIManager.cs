@@ -11,29 +11,65 @@ namespace UserInterface
 {
     public class UIManager
     {
-        public List<UIBase> UiElements { get; set; } = new List<UIBase>();
+        public IEnumerable<UIBase> UiElements { get => elements;}
+        private List<UIBase> elements { get; set; } = new List<UIBase>();
+        private LinkedList<UIBase> waitingRemove = new LinkedList<UIBase>();
+        private LinkedList<UIBase> waitingAdd = new LinkedList<UIBase>();
         KeyboardState oldKeyboardState;
         MouseState oldMouseState;
         SpriteBatch spriteBatch;
-        //public UIBase? MouseOverTooltip { get; set; }
 
         public UIManager(GraphicsDevice graphicsDevice)
         {
             spriteBatch = new SpriteBatch(graphicsDevice); 
         }
 
+
+        public void Add(UIBase ui)
+        { 
+            waitingAdd.AddLast(ui);
+        }
+
+        public void Remove(UIBase ui)
+        {
+            waitingRemove.AddLast(ui);
+        }
+
         public void Update(GameTime gt)
         {
             MouseState mouseState = Mouse.GetState();
             KeyboardState keyboardState = Keyboard.GetState();
-
             foreach (UIBase ibase in UiElements)
             {
                 ibase.Update(gt, oldMouseState, mouseState, oldKeyboardState, keyboardState);
             }
-
+            ProcessRemovedAddedElements();
             oldKeyboardState = keyboardState;
             oldMouseState = mouseState;
+        }
+
+        public void ProcessRemovedAddedElements()
+        {
+            ProccessRemovedElements();
+            ProccessAddedElements();
+        }
+
+        private void ProccessAddedElements()
+        {
+            foreach (var e in waitingAdd)
+            {
+                elements.Add(e);
+            }
+            waitingAdd.Clear();
+        }
+
+        private void ProccessRemovedElements()
+        {
+            foreach (var e in waitingRemove)
+            {
+                elements.Remove(e);
+            }
+            waitingRemove.Clear();
         }
 
         public UIBase? GetUIAtLocation(Point location)

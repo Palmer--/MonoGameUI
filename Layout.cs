@@ -31,6 +31,7 @@ namespace UserInterface
 
         public static void Center(IEnumerable<UIBase> elements, Point center)
         {
+
             foreach (var elem in elements)
             {
                 Center(elem, center);
